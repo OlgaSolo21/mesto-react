@@ -43,7 +43,7 @@ function Main({cards, onEditProfile, onEditAvatar, onAddPlace, onCardClick, onCa
                 >
                     <img
                         src={addButton}
-                        alt="Кнопка добавить"
+                        alt="Кнопка добавить место"
                     />
                 </button>
             </section>
