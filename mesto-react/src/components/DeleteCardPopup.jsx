@@ -1,20 +1,13 @@
 import PopupWithForm from "./PopupWithForm.jsx";
 import card from "./Card.jsx";
 
-function DeleteCardPopup({isOpen, onClose, onDeleteCard}) {
-
-    // function handleDeleteCard (e) {
-    //     // Запрещаем браузеру переходить по адресу формы
-    //     e.preventDefault();
-    //
-    //     onDeleteCard(card._id)
-    // }
+function DeleteCardPopup({isOpen, onClose, onDeleteCard, onLoading}) {
 
     return(
         <PopupWithForm
             name='delete-card'
             title='Вы уверены?'
-            buttonText='Да'
+            buttonText={onLoading ? `Удаление...` : `Да`}
             isOpen={isOpen}
             onClose={onClose}
             onSubmit={onDeleteCard}

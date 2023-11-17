@@ -1,13 +1,11 @@
 import {useContext} from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
-function Card({card, onCardClick, onCardLike, onDeleteCard, onCardDeletePopup}) {
-
+function Card({card, onCardClick, onCardLike, setCardDel, onCardDeletePopup}) {
     const currentUser = useContext(CurrentUserContext) // подписываемся на контекст current User то есть получает данные о пользователе с сервера
 
     const isOwn = card.owner._id === currentUser._id; // Определяем, являемся ли мы владельцем текущей карточки
     const buttonDeleteCardClassName = `cursor ${isOwn ? 'cards__trash' : ''}` // переменная, которую добавляем в класс корзины
-
 
     const isLiked = card.likes.some(i => i._id === currentUser._id); // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
     const cardLikeButtonClassName = `cards__like ${isLiked ? 'cards__like_active' : ''}` // Создаём переменную, которую после зададим в `className` для кнопки лайка
@@ -15,17 +13,15 @@ function Card({card, onCardClick, onCardLike, onDeleteCard, onCardDeletePopup}) 
     const handleCardClick = () => {// открытие на весь экран
         onCardClick(card)
     }
-
     const handleLikeClick = () => {//постановка снятие лайка
         onCardLike(card)
-
     }
-
     const handleDeleteClick = () => {//удаление карточки
         onCardDeletePopup(card)
+        setCardDel(card._id)
     }
 
-    return(
+        return(
         <li className="cards__item">
             <img className="cards__image cursor" src={card.link} alt={`Фото ${card.name}`} onClick={handleCardClick} />
             <button className={buttonDeleteCardClassName} onClick={handleDeleteClick} />
@@ -39,5 +35,4 @@ function Card({card, onCardClick, onCardLike, onDeleteCard, onCardDeletePopup}) 
         </li>
     )
 }
-
 export default Card

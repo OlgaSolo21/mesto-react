@@ -1,7 +1,7 @@
 import PopupWithForm from "./PopupWithForm.jsx";
 import {useEffect, useRef} from "react";
 
-function EditAvatarPopup ({isOpen, onClose, onUpdateAvatar}) {
+function EditAvatarPopup ({isOpen, onClose, onUpdateAvatar, onLoading}) {
 
     const avatarRef = useRef() // используем реф, чтобы получить прямой доступ к DOM-элементу инпута и его значению
     useEffect(() => { // монтируем эффект и указывает значение пустую строку
@@ -21,7 +21,7 @@ function EditAvatarPopup ({isOpen, onClose, onUpdateAvatar}) {
             title='Обновить аватар'
             isOpen={isOpen}
             onClose={onClose}
-            buttonText='Обновить'
+            buttonText={onLoading ? `Обновление...` : `Обновить`}
             onSubmit={handleSubmit}
         >
             <input

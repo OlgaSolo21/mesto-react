@@ -3,7 +3,7 @@ import {useState, useEffect, useContext} from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
 
-function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
+function EditProfilePopup({isOpen, onClose, onUpdateUser, onLoading}) {
 
     //стейт-переменные name и description для привязки их к полям ввода
     const [name, setName] = useState('')
@@ -43,7 +43,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
         //должно задаваться с помощью соответствующей переменной состояния (из тз 10пр для понимания)
         isOpen={isOpen} //переменная состояния
         onClose={onClose}
-        buttonText='Сохранить'
+        buttonText={onLoading ? `Сохранение...` : `Сохранить`}
         onSubmit={handleSubmit}
     >
         <input

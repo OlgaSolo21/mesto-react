@@ -18,6 +18,7 @@ function App() {
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
     const [isDeletePopup, setIsDeletePopup] = useState(false) //попап удаления своей карточки
+    const [isLoading, setIsLoading] = useState(false)
 
     //функции обработчики событий, которые изменяют внутреннее состояние попапов
     function handleEditProfileClick() { //редактирование профиля
@@ -39,6 +40,8 @@ function App() {
         setIsAddPlacePopupOpen(false)
         setIsEditAvatarPopupOpen(false)
         setSelectedCard({})
+        setIsDeletePopup(false)
+        setCardDel('')
     }
 
     //стейт-переменная открытия карточки на весь экран
@@ -60,7 +63,6 @@ function App() {
     const [cards, setCards] = useState([])
 
     useEffect(() => { //используем хук для монтирования данных на страницу
-
         api.getInitialCards() // данные карточек
             .then((cards) => {
                 setCards(cards)
@@ -81,45 +83,54 @@ function App() {
             .catch(console.error)
     }
 
+    const [cardDel, setCardDel] = useState('')
     // функциона поддержки удаления карточки
-    function handleCardDelete(card) {
-        api.deleteCard(card._id)
+    function handleCardDelete(e) {
+        setIsLoading(true)
+        e.preventDefault();
+        api.deleteCard(cardDel)
             .then(() => {
-                setCards((cards) => cards.filter((c) => c._id !== card._id))
+                setCards((cards) => cards.filter((c) => c._id !== cardDel))
                 closeAllPopups()
             })
             .catch(console.error)
-            .finally(() => {})
+            .finally(() => setIsLoading(false))
     }
 
     //работа с блоком редактирования данных
     function handleUpdateUser(data) {
+        setIsLoading(true)
         api.editProfilePatch(data)
             .then((item) => {
                 setCurrentUser(item)
                 closeAllPopups()
             })
             .catch(console.error)
+            .finally(() => setIsLoading(false))
     }
 
     //работа с блоком изменения аватара
     function handleUpdateAvatar(data) {
+        setIsLoading(true)
         api.updateAvatarPatch(data)
             .then((item) => {
                 setCurrentUser(item)
                 closeAllPopups()
             })
             .catch(console.error)
+            .finally(() => setIsLoading(false))
     }
 
     //работа с блоком добавления новой карточки
     function handleAddPlaceSubmit(data) {
+        setIsLoading(true)
         api.addNewCardPost(data)
             .then((newCard) => {
                 setCards([newCard, ...cards])
                 closeAllPopups()
             })
             .catch(console.error)
+            .finally(() => setIsLoading(false))
     }
 
   return (
@@ -133,7 +144,7 @@ function App() {
               onCardClick={handleOpenFullScreenCard}
               cards={cards}
               onCardLike={handleCardLike}
-              //onDeleteCard={handleCardDelete}
+              setCardDel={setCardDel}
               onCardDeletePopup={handleDeleteCardPopup}
           />
           <Footer/>
@@ -142,24 +153,28 @@ function App() {
               isOpen={isEditProfilePopupOpen}
               onClose={closeAllPopups}
               onUpdateUser={handleUpdateUser}
+              onLoading={isLoading}
           />
 
           <EditAvatarPopup
               isOpen={isEditAvatarPopupOpen}
               onClose={closeAllPopups}
               onUpdateAvatar={handleUpdateAvatar}
+              onLoading={isLoading}
           />
 
           <AddPlacePopup
               isOpen={isAddPlacePopupOpen}
               onClose={closeAllPopups}
               onAddPlace={handleAddPlaceSubmit}
+              onLoading={isLoading}
           />
 
           <DeleteCardPopup
               isOpen={isDeletePopup}
               onClose={closeAllPopups}
               onDeleteCard={handleCardDelete}
+              onLoading={isLoading}
           />
 
           <ImagePopup

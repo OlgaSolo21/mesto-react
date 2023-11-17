@@ -1,7 +1,7 @@
 import PopupWithForm from "./PopupWithForm.jsx";
 import {useEffect, useState} from "react";
 
-function AddPlacePopup ({isOpen, onClose, onAddPlace}) {
+function AddPlacePopup ({isOpen, onClose, onAddPlace, onLoading}) {
 
     // используем переменные состояния, чтобы исп управляемые компоненты (как в блоке редактирования пользователя)
     const [nameAdd, setNameAdd] = useState('')
@@ -35,7 +35,7 @@ function AddPlacePopup ({isOpen, onClose, onAddPlace}) {
             title='Новое место'
             isOpen={isOpen}
             onClose={onClose}
-            buttonText='Добавить'
+            buttonText={onLoading ? `Добавление...` : `Добавить`}
             onSubmit={handleSubmit}
         >
             <input
